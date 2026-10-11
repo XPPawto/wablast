@@ -49,7 +49,7 @@ export const ProgressBar = ({ value, tone = 'bg-wa-500', className = 'h-2' }) =>
 );
 
 export const ErrorNote = ({ error }) =>
-  error ? <div role="alert" className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">{error.message || String(error)}</div> : null;
+  error ? <div role="alert" className="rounded-md border border-red-200 bg-red-50 px-3 py-2 whitespace-pre-line text-sm text-red-800">{error.message || String(error)}</div> : null;
 
 export function Modal({ title, onClose, children, wide }) {
   return (

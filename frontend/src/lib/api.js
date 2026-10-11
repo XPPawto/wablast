@@ -24,6 +24,12 @@ export async function api(path, { method = 'GET', body, params } = {}) {
   }
   if (res.status === 204) return null;
   const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw Object.assign(new Error(data.error || `Request gagal (${res.status})`), { code: data.code });
+  if (!res.ok) {
+    // Body bukan JSON = respons berasal dari proxy/hosting (backend mati, timeout, dsb.), bukan dari API kita
+    const gateway = [502, 503, 504].includes(res.status) && !data.error;
+    throw Object.assign(new Error(data.error || (gateway
+      ? `Server tidak merespons (${res.status}). Backend mungkin mati atau sedang restart — cek log backend.`
+      : `Request gagal (${res.status})`)), { code: data.code });
+  }
   return data;
 }
